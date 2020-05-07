@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description='PyTG command line add module utility')
     parser.add_argument("--folder")
     parser.add_argument("--repo")
-    parser.add_argument("--clear-after")
+    parser.add_argument("--source-only", action="store_true")
 
     args = parser.parse_args()
 
@@ -38,7 +38,7 @@ def main():
     logging.info("Copying source...")
     shutil.copytree("{}/src".format(source_folder), src_destination_folder)
 
-    if "source_only" not in descriptor.keys() or not descriptor["source_only"]:
+    if not args.source_only and ("source_only" not in descriptor.keys() or not descriptor["source_only"]):
         logging.info("Copying content...")
         shutil.copytree("{}/dist_content".format(source_folder), content_destination_folder)
 

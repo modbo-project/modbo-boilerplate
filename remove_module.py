@@ -8,6 +8,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='PyTG command line remove module utility')
     parser.add_argument("--name")
+    parser.add_argument("--source-only", action='store_true')
 
     args = parser.parse_args()
 
@@ -26,12 +27,13 @@ def main():
         logging.warning("Couldn't remove source files, folder not found")
 
     # Remove content
-    logging.info("Removing content...")
+    if not args.source_only:
+        logging.info("Removing content...")
 
-    try:
-        shutil.rmtree("content/{}".format(args.name))
-    except FileNotFoundError:
-        logging.warning("Couldn't remove content files, folder not found")
+        try:
+            shutil.rmtree("content/{}".format(args.name))
+        except FileNotFoundError:
+            logging.warning("Couldn't remove content files, folder not found")
 
 
 if __name__ == "__main__":
