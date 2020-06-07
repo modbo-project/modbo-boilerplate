@@ -4,3 +4,8 @@
 !*.py
 !modules/pytg/
 !content/deleteme
+
+!requirements.txt
+
+!docs/*
+!.readthedocs.yaml
