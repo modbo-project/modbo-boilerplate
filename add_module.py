@@ -11,6 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description='PyTG command line add module utility')
     parser.add_argument("--folder")
     parser.add_argument("--repo")
+    parser.add_argument("--subfolder")
     parser.add_argument("--source-only", action="store_true")
 
     args = parser.parse_args()
@@ -24,8 +25,11 @@ def main():
     if args.folder:
         source_folder = args.folder
     elif args.repo:
-        source_folder = "repo_tmp/"
         Repo.clone_from(args.repo, "repo_tmp/")
+        if args.subfolder:
+            source_folder = "repo_tmp/{}".format(args.subfolder)
+        else:
+            source_folder = "repo_tmp/"
 
     descriptor = yaml.safe_load(open("{}/descriptor.yaml".format(source_folder), "r"))
 
