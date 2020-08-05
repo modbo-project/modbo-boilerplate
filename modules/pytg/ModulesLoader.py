@@ -1,19 +1,31 @@
 import importlib
 
+from .components.production.PathsRetriever import PathsRetriever
+from .components.development.DevelopmentPathsRetriever import DevelopmentPathsRetriever
+
 class ModulesLoader():
     __loaded_modules = []
+    __paths_retriever = None
+
+    @staticmethod
+    def inject_prod_components_in_modules_loader():
+        ModulesLoader.__paths_retriever = PathsRetriever()
+
+    @staticmethod
+    def inject_dev_components_in_modules_loader(reroute_rules):
+        ModulesLoader.__paths_retriever = DevelopmentPathsRetriever(reroute_rules)
 
     @staticmethod
     def get_module_content_folder(module_name):
-        return "content/{}".format(module_name)
+        return ModulesLoader.__paths_retriever.get_module_content_folder(module_name)
 
     @staticmethod
     def get_module_folder(module_name):
-        return "modules/{}".format(module_name)
+        return ModulesLoader.__paths_retriever.get_module_folder(module_name)
 
     @staticmethod
     def get_module_package(module_name):
-        return "modules.{}".format(module_name)
+        return ModulesLoader.__paths_retriever.get_module_package(module_name)
 
     @staticmethod
     def get_module_id(module_name):
