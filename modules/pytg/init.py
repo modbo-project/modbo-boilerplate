@@ -2,7 +2,7 @@ import logging, os
 
 import queue
 
-from modules.pytg.ModulesLoader import ModulesLoader
+from modules.pytg.ModulesLoader import ModulesLoader, _InternalModulesLoader
 
 def initialize():
     logging.info("Initializing pytg module...")
@@ -36,3 +36,21 @@ def load_manager():
 
 def depends_on():
     return []
+
+def launch(main_module="bot", dev_mode=False, reroute_rules=None):
+    _InternalModulesLoader.initialize(dev_mode)
+
+    # Add reroute rules (if any)
+    if reroute_rules:
+        for (original_module, replacement_module) in reroute_rules.items():
+            ModulesLoader.add_reroute_rule(original_module, replacement_module)
+
+    # Initialize PyTG module (initializes all modules)
+    ModulesLoader.initialize_module("pytg")
+
+    # Connect PyTG module (connects all modules)
+    ModulesLoader.connect_module("pytg")
+
+    # Launch main module
+    ModulesLoader.launch_main_module(main_module)
+

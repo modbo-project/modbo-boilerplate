@@ -1,9 +1,12 @@
 **/__pycache__/
 
-.*
 !.gitignore
 
 content/
 
 modules/*
 !modules/pytg
+
+.vscode/
+
+env/

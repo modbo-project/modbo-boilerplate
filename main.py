@@ -2,11 +2,11 @@ import telegram, logging, threading, datetime, argparse, sys
 
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters 
 
-from modules.pytg.ModulesLoader import ModulesLoader
+from modules.pytg.init import launch 
 
 from utils.load import *
 
-def main():
+def __main():
     logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.INFO,
@@ -25,33 +25,20 @@ def main():
     main_module = args.main_module
     reroute_args = args.reroute
 
-    dev_mode = False
-
-    if not main_module:
-        logging.error("No main module specified")
-
-        sys.exit(1)
-
-    # Formalize re-routes
     if reroute_args:
         dev_mode = True
-
-        reroute_rules = parse_reroute_rules(reroute_args)
-
-    # Inject development components in test mode
-    if dev_mode:
-        ModulesLoader.inject_dev_components_in_modules_loader(reroute_rules)
     else:
-        ModulesLoader.inject_prod_components_in_modules_loader()
+        dev_mode = False
+    
+    if not main_module:
+        main_module = "bot"
 
-    # Initialize PyTG module (initializes all modules)
-    ModulesLoader.initialize_module("pytg")
+    if reroute_args:
+        reroute_rules = parse_reroute_rules(reroute_args)
+    else:
+        reroute_rules = None
 
-    # Connect PyTG module (connects all modules)
-    ModulesLoader.connect_module("pytg")
-
-    # Launch main module
-    ModulesLoader.launch_main_module(main_module)
+    launch(main_module, dev_mode, reroute_rules)
 
 if __name__ == '__main__':
-    main()
+    __main()

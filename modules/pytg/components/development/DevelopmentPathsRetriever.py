@@ -1,12 +1,15 @@
 import logging
 
 class DevelopmentPathsRetriever():
-    def __init__(self, reroute_rules):
-        self.reroute_rules = reroute_rules
+    def __init__(self):
+        self.__reroute_rules = {}
+
+    def add_reroute_rule(self, original_module, replacement_module):
+        self.__reroute_rules[original_module] = replacement_module
 
     def get_routed_module_name(self, module_name):
-        if module_name in self.reroute_rules.keys():
-            return self.reroute_rules[module_name]
+        if module_name in self.__reroute_rules.keys():
+            return self.__reroute_rules[module_name]
 
         return module_name
 
