@@ -12,6 +12,9 @@ class _InternalModulesLoader():
 
     def __init__(self, dev_mode):
         self.__loaded_modules = []
+        self.dev_mode = dev_mode
+
+        self.logger = logging.getLogger("ModulesLoader")
 
         if dev_mode:
             self.__paths_retriever = DevelopmentPathsRetriever()
@@ -19,6 +22,10 @@ class _InternalModulesLoader():
             self.__paths_retriever = PathsRetriever()
 
     def add_reroute_rule(self, original_module, replacement_module):
+        if not self.dev_mode:
+            self.logger.warn("Can't add reroute rule ({} := {}). Adding reroute rule while not in dev mode is not supported, skipping".format(original_module, replacement_module))
+            return
+
         self.__paths_retriever.add_reroute_rule(original_module, replacement_module)
 
     def get_module_content_folder(self, module_name):

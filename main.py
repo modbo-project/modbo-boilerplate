@@ -19,16 +19,13 @@ def __main():
     parser = argparse.ArgumentParser(description='PyTG command line launcher')
     parser.add_argument("--main-module")
     parser.add_argument("--reroute", action="append")
+    parser.add_argument("--devmode", action="store_true")
 
     args = parser.parse_args()
 
     main_module = args.main_module
     reroute_args = args.reroute
-
-    if reroute_args:
-        dev_mode = True
-    else:
-        dev_mode = False
+    dev_mode = args.devmode
     
     if not main_module:
         main_module = "bot"
