@@ -23,7 +23,7 @@ class _InternalModulesLoader():
 
     def add_reroute_rule(self, original_module, replacement_module):
         if not self.dev_mode:
-            self.logger.warn("Can't add reroute rule ({} := {}). Adding reroute rule while not in dev mode is not supported, skipping".format(original_module, replacement_module))
+            self.logger.warning("Can't add reroute rule ({} := {}). Adding reroute rule while not in dev mode is not supported, skipping".format(original_module, replacement_module))
             return
 
         self.__paths_retriever.add_reroute_rule(original_module, replacement_module)
@@ -84,7 +84,7 @@ class _InternalModulesLoader():
 # Support to static access to ModulesLoader before deprecation
 class __StaticModulesLoaderAccess(type):
     def __getattr__(cls, key):
-        logging.warn("Static access to ModulesLoader attribute is deprecated and will be removed in a future release. Port your code as soon as possible")
+        logging.warning("Static access to ModulesLoader attribute is deprecated and will be removed in a future release. Port your code as soon as possible")
         return getattr(_InternalModulesLoader._instance, key)
 
 class ModulesLoader(metaclass=__StaticModulesLoaderAccess):
