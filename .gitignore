@@ -2,17 +2,8 @@
 
 !.gitignore
 
-content/
-
-modules/*
 !modules/pytg
 
 .vscode/
 
 env/
-
-dev_content/*
-dev_modules/*
-
-!dev_content/deleteme
-!dev_modules/deleteme
