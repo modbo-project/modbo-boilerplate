@@ -1,4 +1,4 @@
-import telegram, yaml
+import telegram, yaml, logging
 
 from telegram.ext import Updater
 
@@ -21,13 +21,16 @@ class MockBotManager(Manager):
         self.bot = MockBot()
         self.updater = MockUpdater(mock_bot = self.bot)
 
+        self.logger = logging.getLogger(__name__)
+
     def add_mock_response(self, method, endpoint, response):
         self.bot.request.add_mock_response(method, endpoint, response)
 
-    def inject_updates(self, updates=[]):
-        self.bot.request.add_mock_response("POST", "getUpdates", {
-            "{'timeout': 10, 'limit': 100}": updates
-        })
+    def inject_update(self, update):
+        self.updater.inject_update(update)
 
     def pull_updates(self):
         self.updater.pull_updates()
+
+    def stop(self):
+        self.updater.stop()

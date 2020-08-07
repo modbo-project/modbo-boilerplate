@@ -34,8 +34,6 @@ def main():
 
     manager.add_mock_response("GET", "getMyCommands", [])
 
-    manager.inject_updates()
-
     manager.updater.start_polling()
 
 def depends_on():

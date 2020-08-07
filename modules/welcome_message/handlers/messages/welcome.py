@@ -5,6 +5,8 @@ from modules.pytg.ModulesLoader import ModulesLoader
 logger = logging.getLogger(__name__)
 
 def welcome_message_handler(update, context):
+    print(context)
+
     bot = context.bot
 
     message = update.message
@@ -12,8 +14,6 @@ def welcome_message_handler(update, context):
     chat_id = message.chat.id
 
     new_chat_members = message.new_chat_members
-
-    print("Welcome")
 
     logger.info("Received welcome message update in chat {}".format(chat_id))
 

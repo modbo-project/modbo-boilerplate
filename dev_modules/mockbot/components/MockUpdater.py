@@ -4,18 +4,29 @@ from telegram.ext import Updater
 
 class MockUpdater(Updater):
     def __init__(self, mock_bot):
-        super(MockUpdater, self).__init__(bot = mock_bot)
+        super(MockUpdater, self).__init__(bot = mock_bot, use_context = True)
 
-    # def pull_updates(self):
-    #     updates = self.bot.get_updates(self.last_update_id)
+        self.__updates = []
 
-    #     if updates:
-    #         if not self.running:
-    #             self.logger.debug('Updates ignored and will be pulled again on restart')
-    #         else:
-    #             for update in updates:
-    #                 self.update_queue.put(update)
-    #             self.last_update_id = updates[-1].update_id + 1
+    def inject_update(self, update):
+        self.__updates.append(update)
 
-    #     print(self.update_queue)
+    def pull_updates(self):
+        for update in self.__updates:
+            self.update_queue.put(update)
 
+        self.__updates.clear()
+
+    def _start_polling(self, poll_interval, timeout, read_latency, bootstrap_retries, clean,
+                       allowed_updates):  # pragma: no cover
+        # Thread target of thread 'updater'. Runs in background, pulls
+        # updates from Telegram and inserts them in the update queue of the
+        # Dispatcher.
+
+        self.logger.debug('Updater thread started (polling)')
+
+        self._bootstrap(bootstrap_retries, clean=clean, webhook_url='', allowed_updates=None)
+
+        self.logger.debug('Bootstrap done')
+
+        return True
