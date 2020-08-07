@@ -10,6 +10,10 @@ class _InternalModulesLoader():
     def initialize(dev_mode = False):
         _InternalModulesLoader._instance = _InternalModulesLoader(dev_mode)
 
+    @staticmethod
+    def get_instance():
+        return _InternalModulesLoader._instance
+
     def __init__(self, dev_mode):
         self.__loaded_modules = []
         self.__dev_mode = dev_mode
@@ -81,7 +85,7 @@ class _InternalModulesLoader():
 # Support to static access to ModulesLoader before deprecation
 class __StaticModulesLoaderAccess(type):
     def __getattr__(cls, key):
-        logging.warning("Static access to ModulesLoader attribute is deprecated and will be removed in a future release. Port your code as soon as possible")
+        logging.warning("Static access to ModulesLoader attributes is deprecated and will be removed in a future release. Port your code as soon as possible")
         return getattr(_InternalModulesLoader._instance, key)
 
 class ModulesLoader(metaclass=__StaticModulesLoaderAccess):
