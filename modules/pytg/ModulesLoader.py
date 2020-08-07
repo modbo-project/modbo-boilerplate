@@ -12,17 +12,20 @@ class _InternalModulesLoader():
 
     def __init__(self, dev_mode):
         self.__loaded_modules = []
-        self.dev_mode = dev_mode
+        self.__dev_mode = dev_mode
 
         self.logger = logging.getLogger("ModulesLoader")
 
-        if dev_mode:
+        if self.__dev_mode:
             self.__paths_retriever = DevelopmentPathsRetriever()
         else:
             self.__paths_retriever = PathsRetriever()
+    
+    def dev_mode_on(self):
+        return self.__dev_mode
 
     def add_reroute_rule(self, original_module, replacement_module):
-        if not self.dev_mode:
+        if not self.__dev_mode:
             self.logger.warning("Can't add reroute rule ({} := {}). Adding reroute rule while not in dev mode is not supported, skipping".format(original_module, replacement_module))
             return
 
@@ -40,9 +43,12 @@ class _InternalModulesLoader():
     def get_module_id(self, module_name):
         return self.__loaded_modules.index(module_name)
 
-    def initialize_module(self, module_name):
+    def initialize_module(self, module_name, dev_module=False):
         if self.is_module_loaded(module_name):
             return
+
+        if dev_module:
+            self.__paths_retriever.add_dev_module(module_name)
 
         # Solve dependencies
         dependencies = self.get_module_dependencies(module_name)
@@ -50,9 +56,7 @@ class _InternalModulesLoader():
         for dependency in dependencies:
             self.initialize_module(dependency)
 
-        initializer = importlib.import_module("{}.init".format(self.get_module_package(module_name)))
-
-        initializer.initialize()
+        self.__get_module_initializer(module_name).initialize()
 
         self.__loaded_modules.append(module_name)
 
@@ -60,26 +64,19 @@ class _InternalModulesLoader():
         return module_name in self.__loaded_modules
 
     def connect_module(self, module_name):
-        initializer = importlib.import_module("{}.init".format(self.get_module_package(module_name)))
-
-        initializer.connect()
+        self.__get_module_initializer(module_name).connect()
 
     def load_manager(self, module_name):
-        initializer = importlib.import_module("{}.init".format(self.get_module_package(module_name)))
-
-        manager = initializer.load_manager()
-
-        return manager 
+        return self.__get_module_initializer(module_name).load_manager()
 
     def get_module_dependencies(self, module_name):
-        initializer = importlib.import_module("{}.init".format(self.get_module_package(module_name)))
-
-        return initializer.depends_on() 
+        return self.__get_module_initializer(module_name).depends_on() 
 
     def launch_main_module(self, module_name):
-        initializer = importlib.import_module("{}.init".format(self.get_module_package(module_name)))
+        self.__get_module_initializer(module_name).main()
 
-        initializer.main()
+    def __get_module_initializer(self, module_name):
+        return importlib.import_module("{}.init".format(self.get_module_package(module_name)))
 
 # Support to static access to ModulesLoader before deprecation
 class __StaticModulesLoaderAccess(type):

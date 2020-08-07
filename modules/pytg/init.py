@@ -10,6 +10,16 @@ def initialize():
     # Initialize modules
     logging.info("Dynamically loading all modules...")
 
+    # Loading dev modules (if needed)
+    if ModulesLoader.dev_mode_on():
+        logging.info("Dynamically loading development modules...")
+
+        dev_modules = os.listdir("dev_modules") 
+        for dev_module_name in dev_modules:
+            logging.info("Dynamically loading development module {}...".format(dev_module_name))
+
+            ModulesLoader.initialize_module(dev_module_name, dev_module = True)
+
     modules = os.listdir("modules")
     modules.remove("pytg")
 
