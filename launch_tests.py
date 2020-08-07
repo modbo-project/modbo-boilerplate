@@ -1,4 +1,4 @@
-import logging, pytest
+import logging, pytest, sys
 
 from modules.pytg.init import launch
 
@@ -16,3 +16,5 @@ if __name__ == '__main__':
     launch(dev_mode = True)
 
     pytest.main()
+
+    sys.exit()
