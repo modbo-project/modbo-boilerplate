@@ -32,5 +32,8 @@ class MockBotManager(Manager):
     def pull_updates(self):
         self.updater.pull_updates()
 
+    def pull_responses(self):
+        return self.bot.request.pull_responses()
+
     def stop(self):
         self.updater.stop()

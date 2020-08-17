@@ -2,6 +2,29 @@ from modules.pytg.load import load_manager
 
 from telegram import Update
 
+# Helper functions
+
+def mockbot_test(setup, clear):
+    def inner(func):
+        setup()
+        func()
+        clear()
+
+    return inner
+
+def setup():
+    print("setup")
+
+def clear():
+    print("clear")
+
+def __load_test_update(name, bot):
+    resources_manager = load_manager("resources")
+    return Update.de_json(resources_manager.load_resource("welcome_message_tests", name, path="test_updates", loader="json"), bot)
+
+# Tests
+
+@mockbot_test(setup = setup, clear = clear)
 def test():
     mockbot_manager = load_manager("mockbot")
     bot = mockbot_manager.bot
@@ -18,8 +41,9 @@ def test():
 
     mockbot_manager.stop()
 
-    assert False
+    responses = mockbot_manager.pull_responses()
 
-def __load_test_update(name, bot):
-    resources_manager = load_manager("resources")
-    return Update.de_json(resources_manager.load_resource("welcome_message_tests", name, path="test_updates", loader="json"), bot)
+    for response in responses:
+        print(response)
+
+    assert True

@@ -5,8 +5,6 @@ from modules.pytg.ModulesLoader import ModulesLoader
 logger = logging.getLogger(__name__)
 
 def welcome_message_handler(update, context):
-    print(context)
-
     bot = context.bot
 
     message = update.message
