@@ -2,7 +2,7 @@ import yaml
 
 from modules.pytg.Manager import Manager
 
-from modules.pytg.ModulesLoader import ModulesLoader
+from modules.pytg.load import manager, get_module_content_folder
 
 class TextManager(Manager):
     @staticmethod
@@ -16,11 +16,10 @@ class TextManager(Manager):
         return TextManager.__instance
 
     def load_phrases(self, module="text", package="phrases", lang=None):
-        module_folder = ModulesLoader.get_module_content_folder(module)
+        module_folder = get_module_content_folder(module)
 
         if not lang:
-            config_manager = ModulesLoader.load_manager("config")
-            lang_settings = config_manager.load_settings_file("text", "lang")
+            lang_settings = manager("config").load_settings_file("text", "lang")
             lang = lang_settings["default"]
 
         return yaml.safe_load(open("{}/text/{}/{}.yaml".format(module_folder, lang, package), "r", encoding="utf8"))

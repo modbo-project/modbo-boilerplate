@@ -20,6 +20,7 @@ def load_manager():
 def main():
     # Start polling
     logging.info("Mock bot polling.")
+
     manager = load_manager()
 
     manager.add_mock_response("GET", "getMe", {

@@ -1,6 +1,6 @@
 import logging
 
-from modules.pytg.ModulesLoader import ModulesLoader
+from modules.pytg.load import manager, get_module_id
 
 from telegram.ext import MessageHandler, Filters
 
@@ -10,11 +10,9 @@ def initialize():
     logging.info("Initializing welcome_message module...")
 
 def connect():
-    module_id = ModulesLoader.get_module_id("welcome_message")
+    module_id = get_module_id("welcome_message")
 
-    bot_manager = ModulesLoader.load_manager("bot")
-
-    dispatcher = bot_manager.updater.dispatcher
+    dispatcher = manager("bot").updater.dispatcher
 
     dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome_message_handler), group=module_id)
 

@@ -1,6 +1,6 @@
 import logging
 
-from modules.pytg.ModulesLoader import ModulesLoader
+from modules.pytg.load import manager
 
 logger = logging.getLogger(__name__)
 
@@ -15,8 +15,7 @@ def welcome_message_handler(update, context):
 
     logger.info("Received welcome message update in chat {}".format(chat_id))
 
-    text_manager = ModulesLoader.load_manager("text")
-    phrases = text_manager.load_phrases("welcome_message")
+    phrases = manager("text").load_phrases("welcome_message")
 
     for new_member in new_chat_members:
         text = phrases["welcome_message"]

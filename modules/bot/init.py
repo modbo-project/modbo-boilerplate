@@ -15,7 +15,7 @@ def load_manager():
 
 def main():
     # Start polling
-    load_manager().updater.start_polling()
+    manager().updater.start_polling()
     logging.info("Polling.")
 
 def depends_on():

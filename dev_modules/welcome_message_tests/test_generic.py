@@ -1,4 +1,4 @@
-from modules.pytg.load import load_manager
+from modules.pytg.load import manager
 
 from telegram import Update
 
@@ -19,14 +19,14 @@ def clear():
     print("clear")
 
 def __load_test_update(name, bot):
-    resources_manager = load_manager("resources")
+    resources_manager = manager("resources")
     return Update.de_json(resources_manager.load_resource("welcome_message_tests", name, path="test_updates", loader="json"), bot)
 
 # Tests
 
 @mockbot_test(setup = setup, clear = clear)
 def test():
-    mockbot_manager = load_manager("mockbot")
+    mockbot_manager = manager("mockbot")
     bot = mockbot_manager.bot
 
     mockbot_manager.inject_update(__load_test_update("simple_welcome", bot))

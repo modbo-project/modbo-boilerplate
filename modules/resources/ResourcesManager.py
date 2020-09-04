@@ -2,7 +2,7 @@ import yaml, os, logging
 
 from modules.pytg.Manager import Manager
 
-from modules.pytg.load import load_manager
+from modules.pytg.load import manager
 
 from .loaders.YamlResourcesLoader import YamlResourcesLoader
 from .loaders.JsonResourcesLoader import JsonResourcesLoader
@@ -19,7 +19,7 @@ class ResourcesManager(Manager):
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-        config_manager = load_manager("config")
+        config_manager = manager("config")
         settings = config_manager.load_settings_file("resources")
 
         self.__loaders = {}
