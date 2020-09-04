@@ -1,13 +1,11 @@
 import logging
 
-from modules.pytg.ModulesLoader import ModulesLoader
+from modules.pytg.development import add_reroute_rule
 
 from .MockBotManager import MockBotManager
 
 def initialize():
     logging.info("Initializing mockbot module...")
-
-    ModulesLoader.add_reroute_rule("bot", "mockbot")
 
     MockBotManager.initialize()
 
@@ -23,19 +21,7 @@ def main():
 
     manager = load_manager()
 
-    manager.add_mock_response("GET", "getMe", {
-        "id": 0,
-        "is_bot": True,
-        "first_name": "Mock Bot",
-        "username": "MockBot",
-        "can_join_groups": True,
-        "can_read_all_group_messages": False,
-        "supports_inline_queries": False
-    })
-
-    manager.add_mock_response("GET", "getMyCommands", [])
-
-    manager.updater.start_polling()
+    manager.start()
 
 def depends_on():
     return ["config"]

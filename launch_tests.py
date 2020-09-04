@@ -1,20 +1,9 @@
-import logging, pytest, sys
-
-from modules.pytg.init import launch
-
-DEBUG = True
+import logging, pytest
 
 if __name__ == '__main__':
-    if DEBUG:
-        logging.basicConfig(
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            level=logging.INFO,
-        )
-    else:
-        logging.basicConfig(level=logging.CRITICAL)
-
-    launch(dev_mode = True)
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.DEBUG,
+    )
 
     pytest.main(["--cov=modules"])
-
-    sys.exit()

@@ -15,10 +15,11 @@ class BotManager(Manager):
     def load():
         return BotManager.__instance
 
-    def __init__(self):
+    def connect(self):
         settings = manager("config").load_settings("bot", "token")
 
         self.bot = telegram.Bot(settings["token"])
         self.updater = Updater(settings["token"], use_context=True)
 
-        return
+    def start_polling(self):
+        self.updater.start_polling()
