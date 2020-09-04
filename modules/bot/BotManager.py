@@ -16,7 +16,7 @@ class BotManager(Manager):
         return BotManager.__instance
 
     def __init__(self):
-        settings = manager("config").load_settings_file("bot", "token")
+        settings = manager("config").load_settings("bot", "token")
 
         self.bot = telegram.Bot(settings["token"])
         self.updater = Updater(settings["token"], use_context=True)

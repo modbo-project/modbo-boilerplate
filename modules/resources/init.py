@@ -9,7 +9,7 @@ def initialize():
 
     config_manager = ModulesLoader.load_manager("config")
 
-    settings = config_manager.load_settings_file("resources")
+    settings = config_manager.load_settings("resources")
 
     ResourcesManager.initialize()
 

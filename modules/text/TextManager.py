@@ -19,7 +19,7 @@ class TextManager(Manager):
         module_folder = get_module_content_folder(module)
 
         if not lang:
-            lang_settings = manager("config").load_settings_file("text", "lang")
+            lang_settings = manager("config").load_settings("text", "lang")
             lang = lang_settings["default"]
 
         return yaml.safe_load(open("{}/text/{}/{}.yaml".format(module_folder, lang, package), "r", encoding="utf8"))

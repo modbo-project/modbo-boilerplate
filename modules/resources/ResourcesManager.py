@@ -20,7 +20,7 @@ class ResourcesManager(Manager):
         self.logger = logging.getLogger(__name__)
 
         config_manager = manager("config")
-        settings = config_manager.load_settings_file("resources")
+        settings = config_manager.load_settings("resources")
 
         self.__loaders = {}
 
