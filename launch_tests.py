@@ -15,6 +15,6 @@ if __name__ == '__main__':
 
     launch(dev_mode = True)
 
-    pytest.main()
+    pytest.main(["--cov=modules"])
 
     sys.exit()
