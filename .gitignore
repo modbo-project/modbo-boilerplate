@@ -4,7 +4,7 @@
 
 !modules/pytg
 
-.vscode/
+.*
 
 env/
 .coverage
