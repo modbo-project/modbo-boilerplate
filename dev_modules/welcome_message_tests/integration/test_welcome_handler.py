@@ -1,16 +1,9 @@
 import pytest
 
 from modules.pytg.development import add_reroute_rule
-
 from modules.pytg.load import manager
 
-from telegram import Update
-
-def setup():
-    pass
-
-def cleanup():
-    pass
+from dev_modules.welcome_message_tests.integration.utils import setup, cleanup, load_test_update
 
 @pytest.fixture(autouse=True)
 def test_container():
@@ -18,16 +11,12 @@ def test_container():
     yield
     cleanup()
 
-def __load_test_update(name, bot):
-    resources_manager = manager("resources")
-    return Update.de_json(resources_manager.load_resource("welcome_message_tests", name, path="test_updates", loader="json"), bot)
-
 # Tests
 def test_simple_welcome():
     mockbot_manager = manager("mockbot")
     bot = mockbot_manager.bot
 
-    mockbot_manager.inject_update(__load_test_update("simple_welcome", bot))
+    mockbot_manager.inject_update(load_test_update("simple_welcome", bot))
 
     mockbot_manager.pull_updates()
 
