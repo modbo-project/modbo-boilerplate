@@ -26,6 +26,9 @@ class MockBotManager(Manager):
     def add_mock_response(self, method, endpoint, response):
         self.bot.request.add_mock_response(method, endpoint, response)
 
+    def add_trigger(self, method, endpoint, trigger):
+        self.bot.request.add_trigger(method, endpoint, trigger)
+
     def inject_update(self, update):
         self.updater.inject_update(update)
 

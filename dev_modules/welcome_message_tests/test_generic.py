@@ -1,3 +1,5 @@
+from modules.pytg.development import add_reroute_rule
+
 from modules.pytg.load import manager
 
 from telegram import Update
@@ -13,6 +15,7 @@ def mockbot_test(setup, clear):
     return inner
 
 def setup():
+    # add_reroute_rule("bot", "mockbot")
     print("setup")
 
 def clear():
@@ -23,9 +26,8 @@ def __load_test_update(name, bot):
     return Update.de_json(resources_manager.load_resource("welcome_message_tests", name, path="test_updates", loader="json"), bot)
 
 # Tests
-
 @mockbot_test(setup = setup, clear = clear)
-def test():
+def test_simple_welcome():
     mockbot_manager = manager("mockbot")
     bot = mockbot_manager.bot
 
@@ -33,17 +35,18 @@ def test():
 
     mockbot_manager.pull_updates()
 
-    mockbot_manager.add_mock_response("POST", "sendMessage",
+    success = False
+
+    def success_guard():
+        nonlocal success
+        success = True
+
+    mockbot_manager.add_trigger("POST", "sendMessage",
         {
-            "{'chat_id': -436279640, 'text': 'Welcome to my group, Chat ID Echo!', 'disable_notification': False}": {}
+            "{'chat_id': -436279640, 'text': 'Welcome to my group, Chat ID Echo!', 'disable_notification': False}": success_guard
         }
     )
 
     mockbot_manager.stop()
 
-    responses = mockbot_manager.pull_responses()
-
-    for response in responses:
-        print(response)
-
-    assert True
+    assert success
