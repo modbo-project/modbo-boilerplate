@@ -18,10 +18,7 @@ def test_container():
 def test_simple_welcome():
     mockbot_manager = manager("mockbot")
 
-    bot = mockbot_manager.bot
-
-    mockbot_manager.inject_update(load_test_update("simple_welcome", bot))
-
+    mockbot_manager.inject_update(load_test_update("simple_welcome", mockbot_manager.bot))
     mockbot_manager.pull_updates()
 
     guard = SuccessGuard()
@@ -39,8 +36,7 @@ def test_simple_welcome():
 def test_multiple_welcome():
     mockbot_manager = manager("mockbot")
 
-    bot = mockbot_manager.bot
-    mockbot_manager.inject_update(load_test_update("multiple_welcome", bot))
+    mockbot_manager.inject_update(load_test_update("multiple_welcome", mockbot_manager.bot))
     mockbot_manager.pull_updates()
 
     guard = SuccessGuard(3)
