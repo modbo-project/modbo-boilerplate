@@ -2,14 +2,16 @@
 
 !.gitignore
 
-*
+modules/
+content/
+
+dev_modules/
+dev_content/
+
 !modules/pytg
+!dev_modules/deleteme
 
-!modules/
-!content/
-
-!dev_modules/
-!dev_content/
+*
 
 env/
 .coverage

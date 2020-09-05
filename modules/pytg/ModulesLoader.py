@@ -54,35 +54,55 @@ class _InternalModulesLoader():
         if dev_module:
             self.__paths_retriever.add_dev_module(module_name)
 
+        initializer = self.__get_module_initializer(module_name)
+        if not initializer:
+            return
+
         # Solve dependencies
         dependencies = self.get_module_dependencies(module_name)
 
         for dependency in dependencies:
             self.initialize_module(dependency)
 
-        try:
-            self.__get_module_initializer(module_name).initialize()
-            self.__loaded_modules.append(module_name)
-        except Exception as e:
-            self.__logger("Couldn't initialize{}module {}: {}".format(" dev " if dev_module else " ", module_name, str(e)))
+        initializer.initialize()
+        self.__loaded_modules.append(module_name)
 
     def is_module_loaded(self, module_name):
         return module_name in self.__loaded_modules
 
     def connect_module(self, module_name):
-        self.__get_module_initializer(module_name).connect()
+        initializer = self.__get_module_initializer(module_name)
+        if not initializer:
+            return
+
+        initializer.connect()
 
     def load_manager(self, module_name):
-        return self.__get_module_initializer(module_name).load_manager()
+        initializer = self.__get_module_initializer(module_name)
+        if not initializer:
+            return
+
+        return initializer.load_manager()
 
     def get_module_dependencies(self, module_name):
-        return self.__get_module_initializer(module_name).depends_on() 
+        initializer = self.__get_module_initializer(module_name)
+        if not initializer:
+            return []
+
+        return initializer.depends_on() 
 
     def launch_main_module(self, module_name):
-        self.__get_module_initializer(module_name).main()
+        initializer = self.__get_module_initializer(module_name)
+        if not initializer:
+            return
+
+        initializer.main()
 
     def __get_module_initializer(self, module_name):
-        return importlib.import_module("{}.init".format(self.get_module_package(module_name)))
+        try:
+            return importlib.import_module("{}.init".format(self.get_module_package(module_name)))
+        except Exception as e:
+            self.__logger.warning("Couldn't find initializer in module {}: {}".format(module_name, str(e)))
 
 # Support to static access to ModulesLoader before deprecation
 class __StaticModulesLoaderAccess(type):
