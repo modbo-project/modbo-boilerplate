@@ -6,4 +6,4 @@ if __name__ == '__main__':
         level=logging.INFO,
     )
 
-    pytest.main(["--cov=modules"])
+    pytest.main(["dev_modules", "--cov=modules"])

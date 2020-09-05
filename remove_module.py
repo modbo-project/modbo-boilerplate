@@ -1,5 +1,7 @@
 import logging, yaml, shutil, argparse
 
+from utils.scaffolding import get_folders_path
+
 def main():
     logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -8,6 +10,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='PyTG command line remove module utility')
     parser.add_argument("--name")
+    parser.add_argument("--dev", action="store_true")
     parser.add_argument("--source-only", action='store_true')
 
     args = parser.parse_args()
@@ -21,8 +24,10 @@ def main():
     # Remove source
     logging.info("Removing source...")
 
+    modules_folder, content_folder = get_folders_path(args.dev)
+
     try:
-        shutil.rmtree("modules/{}".format(args.name))
+        shutil.rmtree("{}/{}".format(modules_folder, args.name))
     except FileNotFoundError:
         logging.warning("Couldn't remove source files, folder not found")
 
@@ -31,7 +36,7 @@ def main():
         logging.info("Removing content...")
 
         try:
-            shutil.rmtree("content/{}".format(args.name))
+            shutil.rmtree("{}/{}".format(content_folder, args.name))
         except FileNotFoundError:
             logging.warning("Couldn't remove content files, folder not found")
 

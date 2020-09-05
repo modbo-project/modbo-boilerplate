@@ -1,6 +1,8 @@
-import logging, yaml, shutil, argparse
+import logging, yaml, shutil, argparse, os
 
 from git import Repo
+
+from utils.scaffolding import get_folders_path
 
 def main():
     logging.basicConfig(
@@ -12,6 +14,7 @@ def main():
     parser.add_argument("--folder")
     parser.add_argument("--repo")
     parser.add_argument("--subfolder")
+    parser.add_argument("--dev", action="store_true")
     parser.add_argument("--source-only", action="store_true")
 
     args = parser.parse_args()
@@ -35,16 +38,25 @@ def main():
 
     logging.info("Adding module '{}' from template {}...".format(descriptor['module_name'], args.folder))
 
-    src_destination_folder = "modules/{}".format(descriptor["module_name"])
-    content_destination_folder = "content/{}".format(descriptor["module_name"])
+    is_dev_module = args.dev or ("development" in descriptor and descriptor["development"])
+
+    modules_folder, content_folder = get_folders_path(is_dev_module)
+
+    src_destination_folder = "{}/{}".format(modules_folder, descriptor["module_name"])
+    content_destination_folder = "{}/{}".format(content_folder, descriptor["module_name"])
 
     # Copy source
     logging.info("Copying source...")
     shutil.copytree("{}/src".format(source_folder), src_destination_folder)
 
+    # Copy content
     if not args.source_only and ("source_only" not in descriptor.keys() or not descriptor["source_only"]):
         logging.info("Copying content...")
         shutil.copytree("{}/dist_content".format(source_folder), content_destination_folder)
+    
+    # Copy descriptor
+    logging.info("Copying descriptor...")
+    shutil.copyfile("{}/descriptor.yaml".format(source_folder), "{}/descriptor.yaml".format(src_destination_folder))
 
     # If repo is used, remove folder
     if args.repo:

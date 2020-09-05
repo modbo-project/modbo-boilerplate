@@ -2,9 +2,14 @@
 
 !.gitignore
 
+*
 !modules/pytg
 
-.*
+!modules/
+!content/
+
+!dev_modules/
+!dev_content/
 
 env/
 .coverage
