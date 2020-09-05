@@ -18,7 +18,7 @@ class _InternalModulesLoader():
         self.__loaded_modules = []
         self.__dev_mode = dev_mode
 
-        self.logger = logging.getLogger("ModulesLoader")
+        self.__logger = logging.getLogger("ModulesLoader")
 
         if self.__dev_mode:
             self.__paths_retriever = DevelopmentPathsRetriever()
@@ -30,7 +30,7 @@ class _InternalModulesLoader():
 
     def add_reroute_rule(self, original_module, replacement_module):
         if not self.__dev_mode:
-            self.logger.warning("Can't add reroute rule ({} := {}). Adding reroute rule while not in dev mode is not supported, skipping".format(original_module, replacement_module))
+            self.__logger.warning("Can't add reroute rule ({} := {}). Adding reroute rule while not in dev mode is not supported, skipping".format(original_module, replacement_module))
             return
 
         self.__paths_retriever.add_reroute_rule(original_module, replacement_module)
@@ -60,9 +60,11 @@ class _InternalModulesLoader():
         for dependency in dependencies:
             self.initialize_module(dependency)
 
-        self.__get_module_initializer(module_name).initialize()
-
-        self.__loaded_modules.append(module_name)
+        try:
+            self.__get_module_initializer(module_name).initialize()
+            self.__loaded_modules.append(module_name)
+        except Exception as e:
+            self.__logger("Couldn't initialize{}module {}: {}".format(" dev " if dev_module else " ", module_name, str(e)))
 
     def is_module_loaded(self, module_name):
         return module_name in self.__loaded_modules
