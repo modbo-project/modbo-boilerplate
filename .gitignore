@@ -9,7 +9,6 @@ dev_modules/
 dev_content/
 
 !modules/pytg
-!dev_modules/deleteme
 
 *
 
