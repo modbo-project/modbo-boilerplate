@@ -30,10 +30,20 @@
     },
     "new_chat_members": [
         {
-            "id": 190149641,
-            "is_bot": true,
-            "first_name": "Chat ID Echo",
-            "username": "chatid_echo_bot"
+            "id": 0,
+            "is_bot": false,
+            "first_name": "User 0",
+            "username": "user0"
+        },{
+            "id": 1,
+            "is_bot": false,
+            "first_name": "User 1",
+            "username": "user1"
+        },{
+            "id": 2,
+            "is_bot": false,
+            "first_name": "User 2",
+            "username": "user2"
         }
     ]
     }
