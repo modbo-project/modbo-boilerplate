@@ -22,6 +22,8 @@ class _InternalModulesLoader():
 
         if self.__dev_mode:
             self.__paths_retriever = DevelopmentPathsRetriever()
+
+            self.__mock_managers = {}
         else:
             self.__paths_retriever = PathsRetriever()
     
@@ -78,6 +80,10 @@ class _InternalModulesLoader():
         initializer.connect()
 
     def load_manager(self, module_name):
+        if self.__dev_mode:
+            if module_name in self.__mock_managers.keys():
+                return self.__mock_managers[module_name]
+
         initializer = self.__get_module_initializer(module_name)
         if not initializer:
             return
@@ -97,6 +103,13 @@ class _InternalModulesLoader():
             return
 
         initializer.main()
+
+    def register_mock_manager(self, module_name, mock_manager):
+        if not self.__dev_mode:
+            self.__logger.warning("Can't register mock manager ({} := {}). Using mock managers while not in dev mode is not supported, skipping".format(module_name, mock_manager))
+            return
+
+        self.__mock_managers[module_name] = mock_manager
 
     def __get_module_initializer(self, module_name):
         try:
