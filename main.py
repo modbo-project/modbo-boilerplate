@@ -1,10 +1,10 @@
-import telegram, logging, threading, datetime, argparse
+import telegram, logging, threading, datetime, argparse, sys
 
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters 
 
-from modules.pytg.ModulesLoader import ModulesLoader
+from modules.pytg.init import boot, initialize, launch 
 
-def main():
+def __main():
     logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.INFO,
@@ -16,23 +16,19 @@ def main():
 
     parser = argparse.ArgumentParser(description='PyTG command line launcher')
     parser.add_argument("--main-module")
+    parser.add_argument("--devmode", action="store_true")
 
     args = parser.parse_args()
 
     main_module = args.main_module
-
+    dev_mode = args.devmode
+    
     if not main_module:
-        logging.error("No main module specified")
-        return
+        main_module = "bot"
 
-    # Initialize PyTG module (initializes all modules)
-    ModulesLoader.initialize_module("pytg")
-
-    # Connect PyTG module (connects all modules)
-    ModulesLoader.connect_module("pytg")
-
-    # Launch main module
-    ModulesLoader.launch_main_module(main_module)
+    boot(dev_mode)
+    initialize()
+    launch(main_module)
 
 if __name__ == '__main__':
-    main()
+    __main()
