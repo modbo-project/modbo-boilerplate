@@ -25,8 +25,9 @@ def __main():
     
     if not main_module:
         main_module = "bot"
-
-    initialize(dev_mode)
+        
+    boot(dev_mode)
+    initialize()
     launch(main_module)
 
 if __name__ == '__main__':
