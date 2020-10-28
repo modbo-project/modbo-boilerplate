@@ -2,7 +2,7 @@ import telegram, logging, threading, datetime, argparse, sys
 
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters 
 
-from modules.pytg.init import initialize, launch 
+from modules.pytg.init import boot, initialize, launch 
 
 def __main():
     logging.basicConfig(
