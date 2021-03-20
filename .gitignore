@@ -8,9 +8,13 @@ content/
 dev_modules/
 dev_content/
 
-!modules/pytg
-
-*
-
 env/
 .coverage
+!*.py
+!modules/pytg/
+!content/deleteme
+
+!requirements.txt
+
+!docs/*
+!.readthedocs.yaml

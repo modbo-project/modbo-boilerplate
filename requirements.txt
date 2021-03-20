@@ -1,0 +1,2 @@
+pyyaml[basic-usage]
+python-telegram-bot[basic-usage]
